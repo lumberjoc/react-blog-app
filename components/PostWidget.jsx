@@ -37,6 +37,14 @@ const PostWidget = ({ categories, slug }) => {
             */}
             {slug ? 'Related Posts' : 'Recent Posts'}
         </h3>
+        {/* Map over all of our posts */}
+        {/* Get specific post */}
+        {relatedPosts.map((post) => ( 
+            // Show div for each post 
+            <div key={post.title} className="flex items-center w-full mb-4">
+                
+            </div>
+        ))}
     </div>
   )
 }
