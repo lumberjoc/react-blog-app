@@ -70,7 +70,6 @@ export const getRecentPosts = async () => {
 };
 
 
-// export const getSimilarPosts = async (categories, slug) => {
 export const getSimilarPosts = async () => {
 
     // Don't display current article, but display other articles
