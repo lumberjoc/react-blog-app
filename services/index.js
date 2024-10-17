@@ -46,3 +46,25 @@ export const getPosts = async () => {
         return [];  // Return an empty array on error
     }
 };
+
+export const getRecentPosts = async () => {
+    const query = gql  `
+        query GetPostDetails() {
+            posts(
+                orderBy: createdAt_ASC
+                last: 3
+            ) {
+                title
+                featuredImage {
+                    url
+                }
+                createAt
+                slug
+            }
+        }
+    `
+    
+    const result = await request(graphqlAPI, query);
+    
+    return result.posts;
+};
