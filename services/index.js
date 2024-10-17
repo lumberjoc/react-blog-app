@@ -70,7 +70,6 @@ export const getRecentPosts = async () => {
 };
 
 
-// export const getSimilarPosts = async (categories, slug) => {
 export const getSimilarPosts = async () => {
 
     // Don't display current article, but display other articles
@@ -98,4 +97,19 @@ export const getSimilarPosts = async () => {
         console.error("Error fetching posts:", error.response || error);
       }
       
+}
+
+
+export const getCategories = async () => {
+    const query = gql`
+     query GetCategories {
+        categories {
+            name
+            slug
+        }
+     }
+    `
+    const result = await request(graphqlAPI, query);
+    
+    return result.categories;
 }
