@@ -91,7 +91,11 @@ export const getSimilarPosts = async () => {
         }
     `
 
-    const result = await request(graphqlAPI, query);
-        
-    return result.posts;
+    try {
+        const result = await request(graphqlAPI, query);
+        return result.posts;
+      } catch (error) {
+        console.error("Error fetching posts:", error.response || error);
+      }
+      
 }
