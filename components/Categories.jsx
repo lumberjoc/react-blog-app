@@ -4,7 +4,7 @@ import Link from "next/link";
 import { getCategories } from "@/services";
 
 const Categories = () => {
-    const [Categories, setCategories] = useState([]);
+    const [categories, setCategories] = useState([]);
     // fetch data using graphql and hygraph
     useEffect(() => {
       getCategories()
@@ -20,6 +20,13 @@ const Categories = () => {
                 */}
                 Categories
             </h3>
+            {categories.map((category) => (
+                <Link key={category.slug} href={`/category/${category.slug}`}>
+                    <span className="cursor-pointer block pb-3 mb-3">
+                        {category.name}
+                    </span>
+                </Link>
+            ))}
         </div>
     )
 }
