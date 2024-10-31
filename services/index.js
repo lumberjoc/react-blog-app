@@ -41,6 +41,7 @@ export const getPosts = async () => {
 
         // Safely return posts with optional chaining
         return result.postsConnection.edges;
+
     } catch (error) {
         console.error('Error fetching posts:', error);
         return [];  // Return an empty array on error
@@ -192,3 +193,59 @@ export const getPostDetails = async (slug) => {
 //         return [];
 //     }
 // };
+
+
+export const getRecentPosts = async () => {
+    const query = gql `
+        query GetPostDetails() {
+            posts(
+                orderBy: createdAt_ASC
+                last: 3
+            ) {
+                title
+                featuredImage {
+                    url
+                }
+                createAt
+                slug
+            }
+        }
+    `
+
+    const result = await request(graphqlAPI, query);
+
+    return result.postsConnection.edges;
+}
+
+export const getSimilarPosts = async () => {
+    const query = gql `
+        query GetPostDetails($slug: String!, $categories: [String!]) {
+            posts(
+                where: {slug_not: $slug, AND: {categories_some: {slug_in: $categories}}}
+                last: 3
+            ) {
+                title
+                featuredImage {
+                    url
+                }
+                createAt
+                slug
+            }  
+        }
+    `
+
+    try {
+        // Fetch the results from Hygraph
+        const result = await request(graphqlAPI, query);
+
+        console.log(result);  // Log the full response to inspect the structure
+
+        // Safely return posts with optional chaining
+        return result.postsConnection.edges;
+        
+    } catch (error) {
+        console.error('Error fetching posts:', error);
+        return [];  // Return an empty array on error
+    }
+    
+};
