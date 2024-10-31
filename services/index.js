@@ -69,8 +69,8 @@ export const getRecentPosts = async () => {
     return result.posts;
 };
 
-
-export const getSimilarPosts = async () => {
+// GET SIMILAR POSTS
+export const getSimilarPosts = async (categories, slug) => {
 
     // Don't display current article, but display other articles
     // that include categories we want to get and return last 3 articles 
@@ -91,7 +91,7 @@ export const getSimilarPosts = async () => {
     `
 
     try {
-        const result = await request(graphqlAPI, query);
+        const result = await request(graphqlAPI, query, { categories, slug });
         return result.posts;
       } catch (error) {
         console.error("Error fetching posts:", error.response || error);
@@ -113,3 +113,82 @@ export const getCategories = async () => {
     
     return result.categories;
 }
+
+
+// GET POST DETAILS 
+export const getPostDetails = async (slug) => {
+    const query = gql`
+      query GetPostDetails($slug : String!) {
+        post(where: {slug: $slug}) {
+          title
+          excerpt
+          featuredImage {
+            url
+          }
+          author{
+            name
+            bio
+            photo {
+              url
+            }
+          }
+          createdAt
+          slug
+          content {
+            raw
+          }
+          category {
+            name
+            slug
+          }
+        }
+      }
+    `;
+  
+    const result = await request(graphqlAPI, query, { slug });
+  
+    return result.post;
+  };
+// export const getPostDetails = async (slug) => {
+//     const query = gql`
+//         query GetPostDetails($slug: String!) { # accepting a slug that's going to be a string 
+//             post(where: {slug: $slug}) { # Only get data from specific post 
+//                 author {
+//                     bio
+//                     name
+//                     id
+//                     photo {
+//                         url
+//                     }
+//                 }
+//                 createdAt
+//                 slug
+//                 title
+//                 excerpt
+//                 featuredImage {
+//                     url
+//                 }
+//                 categories {
+//                     name
+//                     slug
+//                 }
+//                 content { # gives access to the post content 
+//                     raw
+//                 }
+//             }
+//         }      
+//     `;
+    
+//     try {
+//         // Fetch the results from Hygraph
+//         const result = await request(graphqlAPI, query, { slug });
+
+//         console.log("GetPostDetails" + result);  // Log the full response to inspect the structure
+
+//         // Safely return posts with optional chaining
+//         return result.post;
+//     } catch (error) {
+//         console.error('Error fetching posts:', error);
+//         return [];
+//     }
+// };
